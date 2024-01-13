@@ -3,23 +3,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private String mode;
+    private Mode mode;
     private List<String> playlist = new ArrayList<>();
     private int currentTrack = 0;
 
     public Player() {
-        this.mode = "Ready";
+        this.mode = Mode.READY;
         for (int i = 1; i <= 12; i++) {
             playlist.add("Track " + i);
         }
     }
 
-    public void changeMode(String mode) {
+    public void changeMode(Mode mode) {
         this.mode = mode;
     }
 
     public String getMode() {
-        return mode;
+        return mode.toString();
     }
 
     public String startPlayback() {
@@ -47,47 +47,18 @@ public class Player {
     }
 
 	public String onPlay() {
-		if(mode.equals("Locked")) {
-			changeMode("Ready");
-	        return "Ready";
-		}
-		if(mode.equals("Playing")) {
-			changeMode("Ready");
-	        return "Paused...";
-		}
-		if(mode.equals("Ready")) {
-	        String action = startPlayback();
-	        changeMode("Playing");
-	        return action;
-		}
-		throw new RuntimeException();
+		return mode.onPlay(this);
 	}
 
 	public String onLock() {
-		if(mode.equals("Locked")) {
-	            return "Locked...";
-		}
-		if(mode.equals("Playing")) {
-			changeMode("Locked");
-	        setCurrentTrackAfterStop();
-	        return "Stop playing";
-		}
-		if(mode.equals("Ready")) {
-	        changeMode("Locked");
-	        return "Locked...";
-		}
-		throw new RuntimeException();
+		return mode.onLock(this);
 	}
 
 	public String onNext() {
-		if(mode.equals("Playing")) 
-			return nextTrack();
-		else return "Locked...";
+		return mode.onNext(this);
 	}
 
 	public String onPrevious() {
-		if(mode.equals("Playing")) 
-			return previousTrack();
-		else return "Locked...";
+		return mode.onPrevious(this);
 	}
 }
