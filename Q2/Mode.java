@@ -50,9 +50,13 @@ public enum Mode {
     }
   };
 
-  public abstract String onPlay(Player player);
+  public String onPlay(Player player){
+    throw new RuntimeException();
+  }
 
-  public abstract String onLock(Player player);
+  public String onLock(Player player){
+    throw new RuntimeException();
+  }
 
   public String onNext(Player player) {
     return "Locked...";
